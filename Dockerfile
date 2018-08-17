@@ -17,8 +17,8 @@ echo "################## [$(date)] Add Packages ##################"             
 apk update --no-cache && apk upgrade --no-cache                                               && \
 apk add --no-cache curl curl-dev mysql-client postfix                                         && \
 echo&&\
-apk add --no-cache --virtual gen-deps alpine-sdk binutils                                     && \
-echo&&\
+apk add --no-cache --virtual gen-deps alpine-sdk autoconf binutils libbz2 libpcre16 libpcre32    \
+  libpcrecpp m4 pcre-dev perl                                                                 && \
 echo "################## [$(date)] Get PHP $PHPV0.$PHPV1 point upgrade ##################"    && \
 PHPV2=$(curl -s $PHPCHGURL|grep -Eo "$PHPV0\.$PHPV1\.\d+"|cut -d\. -f3|sort -n|tail -1)       && \
 PHPVER=$PHPV0.$PHPV1.$PHPV2                                                                   && \
@@ -42,7 +42,7 @@ echo "################## [$(date)] Install initial and dev PHP packages ########
 echo&&\
 apk add --allow-untrusted $(find $PGKDIR|egrep "php$PHPV0-((common|session)-)?$PHPV0")        && \
 echo&&\
-apk add --allow-untrusted --no-cache --virtual php-deps autoconf m4 libbz2 pcre-dev perl         \
+apk add --allow-untrusted --no-cache --virtual php-deps                                          \
   $(find $PGKDIR|egrep "php$PHPV0-(dev|phar)-$PHPV0")                                         && \
 echo&&\
 echo "################## [$(date)] Build ancillary PHP packages ##################"           && \
