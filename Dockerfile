@@ -6,17 +6,15 @@ PHPV0=7                                                                         
 PHPV1=1                                                                                       && \
 echo "################## [$(date)] Setup PHP $PHPV0.$PHPV1 Preflight vars ##################" && \
 PHPCHGURL=http://php.net/ChangeLog-$PHPV0.php                                                 && \
-PGKDIR=/home/abuild/packages/community/x86_64                                                 && \
+PGKDIR=/home/abuild/packages                                                                  && \
 PKGS1="ctype|curl|dom|fpm|ftp|gd|gettext|imap|json|ldap|mbstring"                             && \
 PKGS2="mcrypt|memcached|mysqlnd|mysqli|opcache|openssl|pdo|pdo_mysql|pdo_pgsql"               && \
 PKGS3="pgsql|redis|simplexml|soap|sockets|tokenizer|xml|xmlreader|xmlwriter|xdebug|zip"       && \
-echo&&\
 PKGS="$PKGS1|$PKGS2|$PKGS3"                                                                   && \
 BLACKFURL=https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$PHPV0$PHPV1            && \
 echo "################## [$(date)] Add Packages ##################"                           && \
 apk update --no-cache && apk upgrade --no-cache                                               && \
 apk add --no-cache curl curl-dev mysql-client postfix                                         && \
-echo&&\
 apk add --no-cache --virtual gen-deps alpine-sdk autoconf binutils libbz2 libpcre16 libpcre32    \
   libpcrecpp m4 pcre-dev perl                                                                 && \
 echo "################## [$(date)] Get PHP $PHPV0.$PHPV1 point upgrade ##################"    && \
@@ -39,20 +37,15 @@ echo&&\
 echo "################## [$(date)] Use Alpine's bump command ##################"              && \
 su - abuild -c "cd aports/community/php$PHPV0 && abump -k php$PHPV0-$PHPVER"                  && \
 echo "################## [$(date)] Install initial and dev PHP packages ##################"   && \
-echo&&\
 apk add --allow-untrusted $(find $PGKDIR|egrep "php$PHPV0-((common|session)-)?$PHPV0")        && \
-echo&&\
 apk add --allow-untrusted --no-cache --virtual php-deps                                          \
   $(find $PGKDIR|egrep "php$PHPV0-(dev|phar)-$PHPV0")                                         && \
-echo&&\
 echo "################## [$(date)] Build ancillary PHP packages ##################"           && \
 su - abuild -c "cd aports/community/php$PHPV0-memcached && abuild checksum && abuild -r"      && \
 su - abuild -c "cd aports/community/php$PHPV0-redis     && abuild checksum && abuild -r"      && \
 su - abuild -c "cd aports/community/php$PHPV0-xdebug    && abuild checksum && abuild -r"      && \
 echo "################## [$(date)] Install PHP packages ##################"                   && \
-echo&&\
 apk add --allow-untrusted $(find $PGKDIR|egrep "php$PHPV0-($PKGS)-.*.apk")                    && \
-echo&&\
 echo "################## [$(date)] Setup Fulcrum Env ##################"                      && \
 adduser -h /var/www/html -s /sbin/nologin -D -H -u 1971 php                                   && \
 chown -R postfix  /var/spool/postfix                                                          && \
