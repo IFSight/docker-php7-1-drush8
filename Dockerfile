@@ -12,6 +12,7 @@ PKGS2="mcrypt|memcached|mysqlnd|mysqli|opcache|openssl|pdo|pdo_mysql|pdo_pgsql" 
 PKGS3="pgsql|redis|simplexml|soap|sockets|tokenizer|xml|xmlreader|xmlwriter|xdebug|zip"        && \
 PKGS="$PKGS1|$PKGS2|$PKGS3"                                                                    && \
 BLACKFURL=https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$PHPV0$PHPV1             && \
+NEW_RELIC_URL=https://download.newrelic.com/php_agent/release                                  && \
 echo "################## [$(date)] Add Packages ##################"                            && \
 apk update --no-cache && apk upgrade --no-cache                                                && \
 apk add --no-cache curl curl-dev mysql-client postfix                                          && \
@@ -60,6 +61,14 @@ tar zxpf /blackfire-probe.tar.gz -C /                                           
 mv /blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so                     && \
 printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n"                  | \
     tee /etc/php$PHPV0/conf.d/90-blackfire.ini                                                 && \
+echo "################## [$(date)] Install New Relic ##################"                       && \
+NEW_RELIC_FILE=$(curl --silent $NEW_RELIC_URL/ |grep musl|cut -f2 -d\"|cut -f4 -d\/)           && \
+curl --silent $NEW_RELIC_URL/$NEW_RELIC_FILE | tar -C /tmp zxvf -                              && \
+export NR_INSTALL_USE_CP_NOT_LN=1                                                              && \
+export NR_INSTALL_SILENT=1                                                                     && \
+/tmp/newrelic-php5-*/newrelic-install install                                                  && \
+rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* /etc/php7/conf.d/newrelic.ini                      && \
+echo "Removing newrelic.ini so it is not used by default, should be mounted"                   && \
 echo "################## [$(date)] Install Composer ##################"                        && \
 cd /usr/local                                                                                  && \
 curl -sS https://getcomposer.org/installer|php                                                 && \
