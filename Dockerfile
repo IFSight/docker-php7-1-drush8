@@ -63,7 +63,7 @@ printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n"  
     tee /etc/php$PHPV0/conf.d/90-blackfire.ini                                                 && \
 echo "################## [$(date)] Install New Relic ##################"                       && \
 NEW_RELIC_FILE=$(curl --silent $NEW_RELIC_URL/ |grep musl|cut -f2 -d\"|cut -f4 -d\/)           && \
-curl --silent $NEW_RELIC_URL/$NEW_RELIC_FILE | tar -C /tmp zxvf -                              && \
+curl --silent $NEW_RELIC_URL/$NEW_RELIC_FILE | tar zxvf - -C /tmp                              && \
 export NR_INSTALL_USE_CP_NOT_LN=1                                                              && \
 export NR_INSTALL_SILENT=1                                                                     && \
 /tmp/newrelic-php5-*/newrelic-install install                                                  && \
