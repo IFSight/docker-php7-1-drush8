@@ -16,7 +16,7 @@ NEW_RELIC_URL=https://download.newrelic.com/php_agent/release                   
 echo "################## [$(date)] Add Packages ##################"                            && \
 apk update --no-cache && apk upgrade --no-cache                                                && \
 apk add --no-cache curl curl-dev mysql-client postfix                                          && \
-apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gnu-libiconv && \
+apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community gnu-libiconv && \
 apk add --no-cache --virtual gen-deps alpine-sdk autoconf binutils libbz2 libpcre16 libpcre32     \
   libpcrecpp m4 pcre-dev perl                                                                  && \
 echo "################## [$(date)] Get PHP $PHPV0.$PHPV1 point upgrade ##################"     && \
