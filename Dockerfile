@@ -5,7 +5,7 @@ RUN STARTTIME=$(date "+%s")                                                     
 PHPV0=7                                                                                        && \
 PHPV1=1                                                                                        && \
 echo "################## [$(date)] Setup PHP $PHPV0.$PHPV1 Preflight vars ##################"  && \
-PHPCHGURL=http://php.net/ChangeLog-$PHPV0.php                                                  && \
+PHPCHGURL=https://www.php.net/ChangeLog-$PHPV0.php                                             && \
 PGKDIR=/home/abuild/packages                                                                   && \
 PKGS1="ctype|curl|dom|fpm|ftp|gd|gettext|imap|iconv|json|ldap|mbstring"                        && \
 PKGS2="mcrypt|memcached|mysqlnd|mysqli|opcache|openssl|pdo|pdo_mysql|pdo_pgsql"                && \
