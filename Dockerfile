@@ -36,8 +36,8 @@ su - abuild -c "git config --global user.email \"fulcrum@ifsight.net\""         
 su - abuild -c "echo ''|abuild-keygen -a -i"                                                   && \
 echo&&\
 echo&&\
-echo "################## [$(date)] Use Alpine's bump command ##################"               && \
-su - abuild -c "cd aports/community/php$PHPV0 && abump -k php$PHPV0-$PHPVER"                   && \
+echo "################## [$(date)] Use Alpine's bump command (ignore failed error) #######"    && \
+su - abuild -c "cd aports/community/php$PHPV0 && abump -k php$PHPV0-$PHPVER || :"              && \
 echo "################## [$(date)] Install initial and dev PHP packages ##################"    && \
 apk add --allow-untrusted $(find $PGKDIR|egrep "php$PHPV0-((common|session)-)?$PHPV0")         && \
 apk add --allow-untrusted --no-cache --virtual php-deps                                           \
