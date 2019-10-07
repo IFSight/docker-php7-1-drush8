@@ -1,6 +1,10 @@
 FROM alpine:3.7
 MAINTAINER IF Fulcrum "fulcrum@ifsight.net"
 
+ENV BUILDDATE 201910090420
+
+ADD healthcheck.sh /healthcheck.sh
+
 RUN STARTTIME=$(date "+%s")                                                                    && \
 PHPV0=7                                                                                        && \
 PHPV1=1                                                                                        && \
@@ -15,7 +19,7 @@ BLACKFURL=https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$PHPV0$PHP
 NEW_RELIC_URL=https://download.newrelic.com/php_agent/release                                  && \
 echo "################## [$(date)] Add Packages ##################"                            && \
 apk update --no-cache && apk upgrade --no-cache                                                && \
-apk add --no-cache curl curl-dev mysql-client postfix                                          && \
+apk add --no-cache curl curl-dev fcgi mysql-client postfix                                     && \
 apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community gnu-libiconv && \
 apk add --no-cache --virtual gen-deps alpine-sdk autoconf binutils libbz2 libpcre16 libpcre32     \
   libpcrecpp m4 pcre-dev perl                                                                  && \
@@ -99,6 +103,8 @@ USER php
 
 ENV COLUMNS 100
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php-fpm7
+
+HEALTHCHECK --interval=30s --timeout=60s --retries=3 CMD /healthcheck.sh
 
 WORKDIR /var/www/html
 
