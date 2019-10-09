@@ -104,7 +104,7 @@ USER php
 ENV COLUMNS 100
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php-fpm7
 
-HEALTHCHECK --interval=30s --timeout=60s --retries=3 CMD /healthcheck.sh
+HEALTHCHECK --interval=5s --timeout=60s --retries=3 CMD /healthcheck.sh
 
 WORKDIR /var/www/html
 
